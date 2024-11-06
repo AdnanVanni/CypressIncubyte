@@ -33,4 +33,4 @@ jobs:
           CI: true
 
       - name: Run Cypress tests
-        run: npx cypress run
+        run: npm run test
