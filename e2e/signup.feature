@@ -1,3 +1,4 @@
+@first
 Feature: Signup feature
   Scenario: Verify valid login 
     Given I am in signup page

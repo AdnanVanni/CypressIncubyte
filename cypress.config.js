@@ -13,6 +13,10 @@ module.exports = defineConfig({
       preprocessor.addCucumberPreprocessorPlugin(on, config);
       return config;
     },
-	specPattern: "**/*.feature",
+	
+  specPattern: [ "**/signup.feature", "**/login.feature" ]
+ 
   },
+ 
+
 })
