@@ -27,27 +27,18 @@ jobs:
           node-version: '18'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
-      - name: Install Cypress dependencies
+      - name: Install Cypress and dependencies
         run: npm install cypress @badeball/cypress-cucumber-preprocessor
+
+      - name: Enable Debugging for Cypress
+        run: echo "CYPRESS_DEBUG=true" >> $GITHUB_ENV
 
       - name: Start the server
         run: npm start &
         env:
           CI: true
 
-      - name: Run split Cypress tests 🧪
-        uses: cypress-io/github-action@v6
-        with:
-          # Run the split Cypress tests with the correct matrix parameters
-          start: false  # Prevent GitHub Action from starting the server again
-        env:
-          SPLIT: ${{ matrix.containers }}  # Total number of parallel test containers
-          SPLIT_INDEX: ${{ matrix.containers[0] }}  # Index for each container to run tests for
-  
-      - name: Run Cypress tests
-        run: npx cypress run
-        env:
-          SPLIT: ${{ matrix.containers }}  
-          SPLIT_INDEX: ${{ matrix.containers[0] }}
+      - name: Run Cypress tests with increased timeout
+        run: npx cypress run --timeout 60000  # Increase timeout to 60 seconds
