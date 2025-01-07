@@ -12,6 +12,11 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    strategy:
+      fail-fast: false
+      matrix:
+        containers: [1, 2]  # Specify the number of parallel jobs you want to run
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -32,5 +37,17 @@ jobs:
         env:
           CI: true
 
+      - name: Run split Cypress tests 🧪
+        uses: cypress-io/github-action@v6
+        with:
+          # Run the split Cypress tests with the correct matrix parameters
+          start: false  # Prevent GitHub Action from starting the server again
+        env:
+          SPLIT: ${{ matrix.containers }}  # Total number of parallel test containers
+          SPLIT_INDEX: ${{ matrix.containers[0] }}  # Index for each container to run tests for
+  
       - name: Run Cypress tests
         run: npx cypress run
+        env:
+          SPLIT: ${{ matrix.containers }}  
+          SPLIT_INDEX: ${{ matrix.containers[0] }}
